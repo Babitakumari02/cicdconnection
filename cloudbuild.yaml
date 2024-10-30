@@ -1,0 +1,30 @@
+steps:
+ 
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - functions
+      - deploy
+      - cloudfunction1  
+      - --region=us-central1
+      - --runtime=python312
+      - --trigger-http
+      - --entry-point=hello_http
+      - --source=cloudfunction1/
+      - --allow-unauthenticated  # This makes it publicly accessible
+
+  # Step to deploy cloudfunction2 as authorized (requires authentication)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - functions
+      - deploy
+      - cloudfunction2  # Name of your Cloud Function (authorized/requires authentication)
+      - --region=us-central1
+      - --runtime=python312
+      - --trigger-http
+      - --entry-point=hello_http
+      - --source=cloudfunction2/
+      # --allow-unauthenticated is omitted to enforce authentication
+
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Or set to NONE if you prefer no logs
